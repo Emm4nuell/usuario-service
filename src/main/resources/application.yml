@@ -4,3 +4,12 @@ server:
 spring:
   application:
     name: usuario-service
+  datasource:
+    url: jdbc:h2:mem:devdb
+    driver-class-name: org.h2.Driver
+    username: sa
+    password:
+  h2:
+    console:
+      enabled: true            # Habilita o console web do H2
+      path: /h2-console         # Caminho para o console web
