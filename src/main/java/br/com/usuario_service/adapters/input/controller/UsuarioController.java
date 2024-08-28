@@ -1,8 +1,11 @@
 package br.com.usuario_service.adapters.input.controller;
 
 import br.com.usuario_service.adapters.input.api.IApiUsuarioController;
+import br.com.usuario_service.adapters.input.api.request.RequestEndereco;
 import br.com.usuario_service.adapters.input.api.request.RequestUsuario;
+import br.com.usuario_service.adapters.input.api.response.ResponseEndereco;
 import br.com.usuario_service.adapters.input.api.response.ResponseUsuario;
+import br.com.usuario_service.application.domain.model.EnderecoModel;
 import br.com.usuario_service.application.domain.model.UsuarioModel;
 import br.com.usuario_service.application.port.in.*;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -25,6 +28,7 @@ public class UsuarioController implements IApiUsuarioController {
     private final IDeleteUsuarioUseCase iDeleteUsuarioUseCase;
     private final IFindAllUsuariosUseCase iFindAllUsuariosUseCase;
     private final IUpdateUsuarioUseCase iUpdateUsuarioUseCase;
+    private final ICreateEnderecoUseCase iCreateEnderecoUseCase;
     private final ObjectMapper mapper;
 
     @Override
@@ -66,6 +70,12 @@ public class UsuarioController implements IApiUsuarioController {
     public ResponseEntity<ResponseUsuario> update(Long id, RequestUsuario request) {
         var model = iUpdateUsuarioUseCase.execute(id, mapper.convertValue(request, UsuarioModel.class));
         return ResponseEntity.status(HttpStatus.OK).body(null);
+    }
+
+    @Override
+    public ResponseEntity<ResponseEndereco> createEndereco(Long id, RequestEndereco request) {
+        var response = iCreateEnderecoUseCase.execute(id, mapper.convertValue(request, EnderecoModel.class));
+        return ResponseEntity.status(HttpStatus.CREATED).body(mapper.convertValue(response, ResponseEndereco.class));
     }
 
 }

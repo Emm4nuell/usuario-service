@@ -1,13 +1,13 @@
 package br.com.usuario_service.adapters.input.api;
 
+import br.com.usuario_service.adapters.input.api.request.RequestEndereco;
 import br.com.usuario_service.adapters.input.api.request.RequestUsuario;
+import br.com.usuario_service.adapters.input.api.response.ResponseEndereco;
 import br.com.usuario_service.adapters.input.api.response.ResponseUsuario;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RequestMapping("v1/integraedu/")
 public interface IApiUsuarioController {
@@ -34,7 +34,10 @@ public interface IApiUsuarioController {
 
     @ResponseStatus(HttpStatus.OK)
     @PutMapping("usuario/update/{id}")
-    public ResponseEntity<ResponseUsuario> update(@PathVariable("id")Long id, @RequestBody RequestUsuario request);
+    public ResponseEntity<ResponseUsuario> update(@PathVariable("id") Long id, @RequestBody RequestUsuario request);
 
+    @ResponseStatus(HttpStatus.CREATED)
+    @PostMapping("usuario/endereco/create/{id}")
+    public ResponseEntity<ResponseEndereco> createEndereco(@PathVariable("id") Long id, @RequestBody RequestEndereco request);
 
 }

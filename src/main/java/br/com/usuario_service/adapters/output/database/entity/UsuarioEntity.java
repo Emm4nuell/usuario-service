@@ -1,11 +1,13 @@
 package br.com.usuario_service.adapters.output.database.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Table(name = "usuario")
@@ -26,4 +28,7 @@ public class UsuarioEntity {
     private String data_nascimento;
     private LocalDateTime data_created;
     private boolean status;
+    @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnore
+    private List<EnderecoEntity> enderecos;
 }
