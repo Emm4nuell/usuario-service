@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
+import java.util.List;
 import java.util.stream.Collectors;
 
 @RestController
@@ -29,6 +30,11 @@ public class UsuarioController implements IApiUsuarioController {
     private final IFindAllUsuariosUseCase iFindAllUsuariosUseCase;
     private final IUpdateUsuarioUseCase iUpdateUsuarioUseCase;
     private final ICreateEnderecoUseCase iCreateEnderecoUseCase;
+    private final IUpdateEnderecoUseCase iUpdateEnderecoUseCase;
+    private final IFindByIdEnderecoUseCase iFindByIdEnderecoUseCase;
+    private final IFindAllEnderecoUseCase iFindAllEnderecoUseCase;
+    private final IFindEnderecosByUsuarioUseCase iFindEnderecosByUsuarioUseCase;
+    private final IDeleteEnderecoUseCase iDeleteEnderecoUseCase;
     private final ObjectMapper mapper;
 
     @Override
@@ -75,7 +81,44 @@ public class UsuarioController implements IApiUsuarioController {
     @Override
     public ResponseEntity<ResponseEndereco> createEndereco(Long id, RequestEndereco request) {
         var response = iCreateEnderecoUseCase.execute(id, mapper.convertValue(request, EnderecoModel.class));
-        return ResponseEntity.status(HttpStatus.CREATED).body(mapper.convertValue(response, ResponseEndereco.class));
+        URI uri = ServletUriComponentsBuilder.fromCurrentRequest()
+                .path("/{id}")
+                .buildAndExpand(response.getId())
+                .toUri();
+        return ResponseEntity.created(uri).build();
+    }
+
+    @Override
+    public ResponseEntity<ResponseEndereco> updateEndereco(Long id, RequestEndereco request) {
+        var domain = iUpdateEnderecoUseCase.execute(id, mapper.convertValue(request, EnderecoModel.class));
+        return ResponseEntity.status(HttpStatus.OK).body(mapper.convertValue(domain, ResponseEndereco.class));
+    }
+
+    @Override
+    public ResponseEntity<Page<ResponseEndereco>> findByIdEndereco(int page, int size, String sort, String direction) {
+        Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.fromString(direction), sort));
+        Page<EnderecoModel> endereco = iFindAllEnderecoUseCase.execute(pageable);
+        var response = endereco.getContent().stream().map(x -> mapper.convertValue(x, ResponseEndereco.class)).collect(Collectors.toList());
+        return ResponseEntity.status(HttpStatus.OK).body(new PageImpl<>(response, pageable, endereco.getTotalElements()));
+    }
+
+    @Override
+    public ResponseEntity<ResponseEndereco> findByIdEndereco(Long id) {
+        var domain = iFindByIdEnderecoUseCase.execute(id);
+        return ResponseEntity.status(HttpStatus.OK).body(mapper.convertValue(domain, ResponseEndereco.class));
+    }
+
+    @Override
+    public ResponseEntity<List<ResponseEndereco>> findByIdEnderecoAndUsuario(Long id) {
+        List<ResponseEndereco> response = iFindEnderecosByUsuarioUseCase.execute(id)
+                .stream().map(x -> mapper.convertValue(x, ResponseEndereco.class)).collect(Collectors.toList());
+        return ResponseEntity.status(HttpStatus.OK).body(response);
+    }
+
+    @Override
+    public ResponseEntity<Void> deleteEndereco(Long id) {
+        iDeleteEnderecoUseCase.execute(id);
+        return ResponseEntity.status(HttpStatus.OK).build();
     }
 
 }

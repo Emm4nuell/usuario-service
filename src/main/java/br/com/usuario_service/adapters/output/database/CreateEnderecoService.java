@@ -16,7 +16,7 @@ public class CreateEnderecoService implements ICreateEnderecoService {
     private final ObjectMapper mapper;
 
     @Override
-    public EnderecoModel execute(Long id, EnderecoModel model) {
+    public EnderecoModel execute(EnderecoModel model) {
         var entity = iEnderecoRepository.save(mapper.convertValue(model, EnderecoEntity.class));
         return mapper.convertValue(entity, EnderecoModel.class);
     }

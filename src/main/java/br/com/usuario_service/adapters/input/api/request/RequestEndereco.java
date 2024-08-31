@@ -8,6 +8,9 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class RequestEndereco {
+    private String nome;
+    private String telefone;
+    private String celular;
     private String cep;
     private String logradouro;
     private String complemento;

@@ -9,6 +9,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RequestMapping("v1/integraedu/")
 public interface IApiUsuarioController {
 
@@ -40,4 +42,27 @@ public interface IApiUsuarioController {
     @PostMapping("usuario/endereco/create/{id}")
     public ResponseEntity<ResponseEndereco> createEndereco(@PathVariable("id") Long id, @RequestBody RequestEndereco request);
 
+    @ResponseStatus(HttpStatus.OK)
+    @PutMapping("usuario/endereco/update/{id}")
+    public ResponseEntity<ResponseEndereco> updateEndereco(@PathVariable("id") Long id, @RequestBody RequestEndereco request);
+
+    @ResponseStatus(HttpStatus.OK)
+    @GetMapping("usuario/enderecos")
+    public ResponseEntity<Page<ResponseEndereco>> findByIdEndereco(
+            @RequestParam(name = "page", defaultValue = "0") int page,
+            @RequestParam(name = "size", defaultValue = "5") int size,
+            @RequestParam(name = "sort", defaultValue = "nome") String sort,
+            @RequestParam(name = "direction", defaultValue = "asc") String direction);
+
+    @ResponseStatus(HttpStatus.OK)
+    @GetMapping("usuario/endereco/{id}")
+    public ResponseEntity<ResponseEndereco> findByIdEndereco(@PathVariable("id") Long id);
+
+    @ResponseStatus(HttpStatus.OK)
+    @GetMapping("usuario/enderecousuario/{id}")
+    public ResponseEntity<List<ResponseEndereco>> findByIdEnderecoAndUsuario(@PathVariable("id") Long id);
+
+    @ResponseStatus(HttpStatus.OK)
+    @DeleteMapping("usuario/endereco/delete/{id}")
+    public ResponseEntity<Void> deleteEndereco(@PathVariable("id") Long id);
 }

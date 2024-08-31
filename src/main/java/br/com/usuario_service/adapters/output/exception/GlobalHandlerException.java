@@ -2,7 +2,7 @@ package br.com.usuario_service.adapters.output.exception;
 
 import br.com.usuario_service.application.domain.exception.CpfAlreadyExistsException;
 import br.com.usuario_service.application.domain.exception.ResourceNotFoundException;
-import br.com.usuario_service.application.domain.exception.UserNotFoundException;
+import br.com.usuario_service.application.domain.exception.NotFoundException;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,8 +19,8 @@ import java.util.Map;
 @RestControllerAdvice
 public class GlobalHandlerException {
 
-    @ExceptionHandler(UserNotFoundException.class)
-    public ResponseEntity<Map<String, Object>> handlerUserNotFoundException(UserNotFoundException exception, HttpServletRequest http){
+    @ExceptionHandler(NotFoundException.class)
+    public ResponseEntity<Map<String, Object>> handlerUserNotFoundException(NotFoundException exception, HttpServletRequest http){
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(createError(
                 HttpStatus.BAD_REQUEST,
                 exception.getMessage(),

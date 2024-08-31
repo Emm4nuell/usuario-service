@@ -3,5 +3,5 @@ package br.com.usuario_service.application.port.out;
 import br.com.usuario_service.application.domain.model.EnderecoModel;
 
 public interface ICreateEnderecoService {
-    EnderecoModel execute(Long id, EnderecoModel model);
+    EnderecoModel execute(EnderecoModel model);
 }

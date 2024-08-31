@@ -1,6 +1,6 @@
 package br.com.usuario_service.application.usecase;
 
-import br.com.usuario_service.application.domain.exception.UserNotFoundException;
+import br.com.usuario_service.application.domain.exception.NotFoundException;
 import br.com.usuario_service.application.domain.model.UsuarioModel;
 import br.com.usuario_service.application.port.in.IFindByIdUsuarioUseCase;
 import br.com.usuario_service.application.port.out.IFindByIdUsuarioService;
@@ -18,6 +18,6 @@ public class FindByIdUsuarioUseCase implements IFindByIdUsuarioUseCase {
     @Override
     public UsuarioModel execute(Long id) {
         return iFindByIdUsuarioService.execute(id).orElseThrow(() ->
-                new UserNotFoundException("Usuario nao localizado na base de dados ID: " + id));
+                new NotFoundException("Endereco nao localizado na base de dados ID: " + id));
     }
 }

@@ -1,6 +1,6 @@
 package br.com.usuario_service.application.usecase;
 
-import br.com.usuario_service.application.domain.exception.UserNotFoundException;
+import br.com.usuario_service.application.domain.exception.NotFoundException;
 import br.com.usuario_service.application.port.in.IDeleteUsuarioUseCase;
 import br.com.usuario_service.application.port.out.IDeleteUsuarioService;
 import br.com.usuario_service.application.port.out.IFindByIdUsuarioService;
@@ -19,7 +19,7 @@ public class DeleteUsuarioUseCase implements IDeleteUsuarioUseCase {
         if (iFindByIdUsuarioService.execute(id).isPresent()){
             iDeleteUsuarioService.execute(id);
         }else {
-            throw new UserNotFoundException("Usuario nao localizado na base de dados ID: " + id);
+            throw new NotFoundException("Usuario nao localizado na base de dados. ID: " + id);
         }
     }
 }

@@ -1,6 +1,6 @@
 package br.com.usuario_service.application.usecase;
 
-import br.com.usuario_service.application.domain.exception.UserNotFoundException;
+import br.com.usuario_service.application.domain.exception.NotFoundException;
 import br.com.usuario_service.application.domain.model.UsuarioModel;
 import br.com.usuario_service.application.port.in.IUpdateUsuarioUseCase;
 import br.com.usuario_service.application.port.out.ICreateUsuarioService;
@@ -18,7 +18,7 @@ public class UpdateUsuarioUseCase implements IUpdateUsuarioUseCase {
     @Override
     public UsuarioModel execute(Long id, UsuarioModel model) {
         var domain = iFindByIdUsuarioService.execute(id).orElseThrow(()->
-                new UserNotFoundException("Usuario nao localizado na base de dados ID: " + id));
+                new NotFoundException("Usuario nao localizado na base de dados ID: " + id));
         model.setId(domain.getId());
         model.setData_created(domain.getData_created());
         model.setStatus(domain.isStatus());
