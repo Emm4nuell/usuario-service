@@ -19,13 +19,17 @@ public class CreateUsuarioUseCase implements ICreateUsuarioUseCase {
 
     @Override
     public UsuarioModel execute(UsuarioModel model) {
-        if(iFindByCpfService.execute(model.getCpf()).isEmpty()){
-            model.setData_created(LocalDateTime.now());
-            model.setStatus(false);
-            return iCreateUsuarioService.execute(model);
-        }else{
-            throw new CpfAlreadyExistsException("Usuario ja cadastrado na base de dados CPF: " + model.getCpf());
-        }
+        if (model != null){
 
+            if(iFindByCpfService.execute(model.getCpf()).isEmpty()){
+                model.setData_created(LocalDateTime.now());
+                model.setStatus(false);
+                return iCreateUsuarioService.execute(model);
+            }else{
+                throw new CpfAlreadyExistsException("Usuario ja cadastrado na base de dados CPF: " + model.getCpf());
+            }
+        }else{
+            throw new IllegalArgumentException("Os dados do usuario nao pode ser nulo.");
+        }
     }
 }

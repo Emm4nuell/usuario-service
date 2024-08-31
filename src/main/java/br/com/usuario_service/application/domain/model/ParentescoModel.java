@@ -12,6 +12,9 @@ public class ParentescoModel {
     private String nome;
     private String telefone;
     private String celular;
+    private String cpf;
+    private String rg;
+    private String email;
     private String cep;
     private String logradouro;
     private String complemento;
