@@ -1,5 +1,5 @@
 package br.com.usuario_service.application.port.out;
 
-public interface IDeleteEnderecoService {
+public interface IDeleteParentescoService {
     void execute(Long id);
 }

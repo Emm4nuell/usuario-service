@@ -1,11 +1,11 @@
 package br.com.usuario_service.adapters.input.controller;
 
 import br.com.usuario_service.adapters.input.api.IApiUsuarioController;
-import br.com.usuario_service.adapters.input.api.request.RequestEndereco;
+import br.com.usuario_service.adapters.input.api.request.RequestParentesco;
 import br.com.usuario_service.adapters.input.api.request.RequestUsuario;
-import br.com.usuario_service.adapters.input.api.response.ResponseEndereco;
+import br.com.usuario_service.adapters.input.api.response.ResponseParentesco;
 import br.com.usuario_service.adapters.input.api.response.ResponseUsuario;
-import br.com.usuario_service.application.domain.model.EnderecoModel;
+import br.com.usuario_service.application.domain.model.ParentescoModel;
 import br.com.usuario_service.application.domain.model.UsuarioModel;
 import br.com.usuario_service.application.port.in.*;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -29,12 +29,12 @@ public class UsuarioController implements IApiUsuarioController {
     private final IDeleteUsuarioUseCase iDeleteUsuarioUseCase;
     private final IFindAllUsuariosUseCase iFindAllUsuariosUseCase;
     private final IUpdateUsuarioUseCase iUpdateUsuarioUseCase;
-    private final ICreateEnderecoUseCase iCreateEnderecoUseCase;
-    private final IUpdateEnderecoUseCase iUpdateEnderecoUseCase;
-    private final IFindByIdEnderecoUseCase iFindByIdEnderecoUseCase;
-    private final IFindAllEnderecoUseCase iFindAllEnderecoUseCase;
-    private final IFindEnderecosByUsuarioUseCase iFindEnderecosByUsuarioUseCase;
-    private final IDeleteEnderecoUseCase iDeleteEnderecoUseCase;
+    private final ICreateParentescoUseCase iCreateParentescoUseCase;
+    private final IUpdateParentescoUseCase iUpdateParentescoUseCase;
+    private final IFindByIdParentescoUseCase iFindByIdParentescoUseCase;
+    private final IFindAllParentescoUseCase iFindAllParentescoUseCase;
+    private final IFindParentescoByUsuarioUseCase iFindParentescoByUsuarioUseCase;
+    private final IDeleteParentescoUseCase iDeleteParentescoUseCase;
     private final ObjectMapper mapper;
 
     @Override
@@ -79,8 +79,8 @@ public class UsuarioController implements IApiUsuarioController {
     }
 
     @Override
-    public ResponseEntity<ResponseEndereco> createEndereco(Long id, RequestEndereco request) {
-        var response = iCreateEnderecoUseCase.execute(id, mapper.convertValue(request, EnderecoModel.class));
+    public ResponseEntity<ResponseParentesco> createParentesco(Long id, RequestParentesco request) {
+        var response = iCreateParentescoUseCase.execute(id, mapper.convertValue(request, ParentescoModel.class));
         URI uri = ServletUriComponentsBuilder.fromCurrentRequest()
                 .path("/{id}")
                 .buildAndExpand(response.getId())
@@ -89,35 +89,35 @@ public class UsuarioController implements IApiUsuarioController {
     }
 
     @Override
-    public ResponseEntity<ResponseEndereco> updateEndereco(Long id, RequestEndereco request) {
-        var domain = iUpdateEnderecoUseCase.execute(id, mapper.convertValue(request, EnderecoModel.class));
-        return ResponseEntity.status(HttpStatus.OK).body(mapper.convertValue(domain, ResponseEndereco.class));
+    public ResponseEntity<ResponseParentesco> updateParentesco(Long id, RequestParentesco request) {
+        var domain = iUpdateParentescoUseCase.execute(id, mapper.convertValue(request, ParentescoModel.class));
+        return ResponseEntity.status(HttpStatus.OK).body(mapper.convertValue(domain, ResponseParentesco.class));
     }
 
     @Override
-    public ResponseEntity<Page<ResponseEndereco>> findByIdEndereco(int page, int size, String sort, String direction) {
+    public ResponseEntity<Page<ResponseParentesco>> findByIdParentesco(int page, int size, String sort, String direction) {
         Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.fromString(direction), sort));
-        Page<EnderecoModel> endereco = iFindAllEnderecoUseCase.execute(pageable);
-        var response = endereco.getContent().stream().map(x -> mapper.convertValue(x, ResponseEndereco.class)).collect(Collectors.toList());
+        Page<ParentescoModel> endereco = iFindAllParentescoUseCase.execute(pageable);
+        var response = endereco.getContent().stream().map(x -> mapper.convertValue(x, ResponseParentesco.class)).collect(Collectors.toList());
         return ResponseEntity.status(HttpStatus.OK).body(new PageImpl<>(response, pageable, endereco.getTotalElements()));
     }
 
     @Override
-    public ResponseEntity<ResponseEndereco> findByIdEndereco(Long id) {
-        var domain = iFindByIdEnderecoUseCase.execute(id);
-        return ResponseEntity.status(HttpStatus.OK).body(mapper.convertValue(domain, ResponseEndereco.class));
+    public ResponseEntity<ResponseParentesco> findByIdEndereco(Long id) {
+        var domain = iFindByIdParentescoUseCase.execute(id);
+        return ResponseEntity.status(HttpStatus.OK).body(mapper.convertValue(domain, ResponseParentesco.class));
     }
 
     @Override
-    public ResponseEntity<List<ResponseEndereco>> findByIdEnderecoAndUsuario(Long id) {
-        List<ResponseEndereco> response = iFindEnderecosByUsuarioUseCase.execute(id)
-                .stream().map(x -> mapper.convertValue(x, ResponseEndereco.class)).collect(Collectors.toList());
+    public ResponseEntity<List<ResponseParentesco>> findByIdParentescoAndUsuario(Long id) {
+        List<ResponseParentesco> response = iFindParentescoByUsuarioUseCase.execute(id)
+                .stream().map(x -> mapper.convertValue(x, ResponseParentesco.class)).collect(Collectors.toList());
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 
     @Override
-    public ResponseEntity<Void> deleteEndereco(Long id) {
-        iDeleteEnderecoUseCase.execute(id);
+    public ResponseEntity<Void> deleteParentesco(Long id) {
+        iDeleteParentescoUseCase.execute(id);
         return ResponseEntity.status(HttpStatus.OK).build();
     }
 

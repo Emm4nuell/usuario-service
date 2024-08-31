@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class ResponseEndereco {
+public class ResponseParentesco {
     private Long id;
     private String nome;
     private String telefone;

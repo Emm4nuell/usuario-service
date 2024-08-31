@@ -1,7 +1,6 @@
 package br.com.usuario_service.adapters.output.database.entity;
 
 import br.com.usuario_service.infrastructure.constants.ParentescoEnum;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -12,7 +11,7 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class EnderecoEntity {
+public class ParentescoEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

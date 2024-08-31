@@ -1,8 +1,8 @@
 package br.com.usuario_service.adapters.input.api;
 
-import br.com.usuario_service.adapters.input.api.request.RequestEndereco;
+import br.com.usuario_service.adapters.input.api.request.RequestParentesco;
 import br.com.usuario_service.adapters.input.api.request.RequestUsuario;
-import br.com.usuario_service.adapters.input.api.response.ResponseEndereco;
+import br.com.usuario_service.adapters.input.api.response.ResponseParentesco;
 import br.com.usuario_service.adapters.input.api.response.ResponseUsuario;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
@@ -40,15 +40,15 @@ public interface IApiUsuarioController {
 
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping("usuario/endereco/create/{id}")
-    public ResponseEntity<ResponseEndereco> createEndereco(@PathVariable("id") Long id, @RequestBody RequestEndereco request);
+    public ResponseEntity<ResponseParentesco> createParentesco(@PathVariable("id") Long id, @RequestBody RequestParentesco request);
 
     @ResponseStatus(HttpStatus.OK)
     @PutMapping("usuario/endereco/update/{id}")
-    public ResponseEntity<ResponseEndereco> updateEndereco(@PathVariable("id") Long id, @RequestBody RequestEndereco request);
+    public ResponseEntity<ResponseParentesco> updateParentesco(@PathVariable("id") Long id, @RequestBody RequestParentesco request);
 
     @ResponseStatus(HttpStatus.OK)
     @GetMapping("usuario/enderecos")
-    public ResponseEntity<Page<ResponseEndereco>> findByIdEndereco(
+    public ResponseEntity<Page<ResponseParentesco>> findByIdParentesco(
             @RequestParam(name = "page", defaultValue = "0") int page,
             @RequestParam(name = "size", defaultValue = "5") int size,
             @RequestParam(name = "sort", defaultValue = "nome") String sort,
@@ -56,13 +56,13 @@ public interface IApiUsuarioController {
 
     @ResponseStatus(HttpStatus.OK)
     @GetMapping("usuario/endereco/{id}")
-    public ResponseEntity<ResponseEndereco> findByIdEndereco(@PathVariable("id") Long id);
+    public ResponseEntity<ResponseParentesco> findByIdEndereco(@PathVariable("id") Long id);
 
     @ResponseStatus(HttpStatus.OK)
     @GetMapping("usuario/enderecousuario/{id}")
-    public ResponseEntity<List<ResponseEndereco>> findByIdEnderecoAndUsuario(@PathVariable("id") Long id);
+    public ResponseEntity<List<ResponseParentesco>> findByIdParentescoAndUsuario(@PathVariable("id") Long id);
 
     @ResponseStatus(HttpStatus.OK)
     @DeleteMapping("usuario/endereco/delete/{id}")
-    public ResponseEntity<Void> deleteEndereco(@PathVariable("id") Long id);
+    public ResponseEntity<Void> deleteParentesco(@PathVariable("id") Long id);
 }

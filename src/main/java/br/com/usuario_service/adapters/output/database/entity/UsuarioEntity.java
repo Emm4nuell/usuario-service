@@ -30,5 +30,5 @@ public class UsuarioEntity {
     private boolean status;
     @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonIgnore
-    private List<EnderecoEntity> enderecos;
+    private List<ParentescoEntity> enderecos;
 }

@@ -1,4 +1,4 @@
-package br.com.usuario_service.adapters.input.api.request;
+package br.com.usuario_service.application.domain.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -7,7 +7,8 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class RequestEndereco {
+public class ParentescoModel {
+    private Long id;
     private String nome;
     private String telefone;
     private String celular;
@@ -18,4 +19,5 @@ public class RequestEndereco {
     private String localidade;
     private String estado;
     private String parentesco;
+    private UsuarioModel usuario;
 }
