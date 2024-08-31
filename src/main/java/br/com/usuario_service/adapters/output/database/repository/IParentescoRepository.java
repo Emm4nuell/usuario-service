@@ -10,6 +10,6 @@ import java.util.List;
 
 @Repository
 public interface IParentescoRepository extends JpaRepository<ParentescoEntity, Long> {
-    @Query(value = "select * from endereco where usuario_id = :id", nativeQuery = true)
-    List<ParentescoEntity> findEnderecosByUsuarioIdNative(@Param("id") Long id);
+    @Query(value = "select * from tb_parentesco where usuario_id = :id", nativeQuery = true)
+    List<ParentescoEntity> findParentescoByUsuarioIdNative(@Param("id") Long id);
 }

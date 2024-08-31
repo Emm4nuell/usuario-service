@@ -19,7 +19,7 @@ public class FindParentescoByUsuarioService implements IFindParentescoByUsuarioS
 
     @Override
     public List<ParentescoModel> execute(Long id) {
-        return iParentescoRepository.findEnderecosByUsuarioIdNative(id).stream().map(x ->
+        return iParentescoRepository.findParentescoByUsuarioIdNative(id).stream().map(x ->
                 mapper.convertValue(x , ParentescoModel.class)).collect(Collectors.toList());
     }
 }
