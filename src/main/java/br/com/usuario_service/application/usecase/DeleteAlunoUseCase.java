@@ -1,0 +1,29 @@
+package br.com.usuario_service.application.usecase;
+
+import br.com.usuario_service.application.domain.exception.NotFoundException;
+import br.com.usuario_service.application.port.in.IDeleteAlunoUseCase;
+import br.com.usuario_service.application.port.out.IDeleteAlunoService;
+import br.com.usuario_service.application.port.out.IFindByIdAlunoService;
+import br.com.usuario_service.infrastructure.config.UseCase;
+import lombok.AllArgsConstructor;
+
+@UseCase
+@AllArgsConstructor
+public class DeleteAlunoUseCase implements IDeleteAlunoUseCase {
+
+    private final IDeleteAlunoService iDeleteAlunoService;
+    private final IFindByIdAlunoService iFindByIdAlunoService;
+
+    @Override
+    public void execute(Long id) {
+        if (id != null){
+            if (iFindByIdAlunoService.execute(id).isPresent()){
+                iDeleteAlunoService.execute(id);
+            }else {
+                throw new NotFoundException("Aluno nao localizado na base de dados ID: " + id);
+            }
+        }else {
+            throw new IllegalArgumentException("Aluno ou id nao pode ser nulo.");
+        }
+    }
+}

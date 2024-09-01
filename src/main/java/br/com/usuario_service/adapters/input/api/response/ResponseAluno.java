@@ -5,24 +5,18 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
+import java.util.Date;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class ResponseParentesco {
+public class ResponseAluno {
     private Long id;
     private String nome;
-    private String telefone;
-    private String celular;
     private String cpf;
     private String rg;
     private String email;
+    private Date data_nascimento;
+    private String sexo;
     private LocalDateTime data_cadastro;
-    private String cep;
-    private String logradouro;
-    private String complemento;
-    private String bairro;
-    private String localidade;
-    private String estado;
-    private String parentesco;
 }

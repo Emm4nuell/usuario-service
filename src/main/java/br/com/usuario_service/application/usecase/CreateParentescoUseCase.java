@@ -9,6 +9,8 @@ import br.com.usuario_service.application.port.out.IFindByIdUsuarioService;
 import br.com.usuario_service.infrastructure.config.UseCase;
 import lombok.AllArgsConstructor;
 
+import java.time.LocalDateTime;
+
 @UseCase
 @AllArgsConstructor
 public class CreateParentescoUseCase implements ICreateParentescoUseCase {
@@ -25,6 +27,7 @@ public class CreateParentescoUseCase implements ICreateParentescoUseCase {
                 throw new CpfAlreadyExistsException("Parente ja cadastrado no sistema. CPF: " + usuario.getCpf());
             }else {
                 model.setUsuario(usuario);
+                model.setData_cadastro(LocalDateTime.now());
                 return iCreateParentescoService.execute(model);
             }
         }else{
