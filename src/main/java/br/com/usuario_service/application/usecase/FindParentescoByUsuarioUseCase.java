@@ -17,11 +17,15 @@ public class FindParentescoByUsuarioUseCase implements IFindParentescoByUsuarioU
 
     @Override
     public List<ParentescoModel> execute(Long id) {
-        var endereco = iFindParentescoByUsuarioService.execute(id);
-        if (endereco.isEmpty()){
-            throw new NotFoundException("Endereco nao localizado na base de dados ID: " + id);
+        if (id != null){
+            var endereco = iFindParentescoByUsuarioService.execute(id);
+            if (endereco.isEmpty()){
+                throw new NotFoundException("Endereco nao localizado na base de dados ID: " + id);
+            }else {
+                return endereco;
+            }
         }else {
-            return endereco;
+            throw new IllegalArgumentException("Id nao pode ser nulo.");
         }
     }
 }

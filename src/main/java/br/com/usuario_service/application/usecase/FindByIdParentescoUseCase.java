@@ -15,7 +15,11 @@ public class FindByIdParentescoUseCase implements IFindByIdParentescoUseCase {
 
     @Override
     public ParentescoModel execute(Long id) {
-        return iFindByIdParentescoService.execute(id).orElseThrow(() ->
-                new NotFoundException("Usuario nao localizado na base de dados ID: " + id));
+        if (id != null){
+            return iFindByIdParentescoService.execute(id).orElseThrow(() ->
+                    new NotFoundException("Usuario nao localizado na base de dados ID: " + id));
+        }else {
+            throw new IllegalArgumentException("Id nao pode ser nulo.");
+        }
     }
 }

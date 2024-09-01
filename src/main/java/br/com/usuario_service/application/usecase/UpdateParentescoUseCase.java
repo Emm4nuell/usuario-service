@@ -17,9 +17,13 @@ public class UpdateParentescoUseCase implements IUpdateParentescoUseCase {
 
     @Override
     public ParentescoModel execute(Long id, ParentescoModel model) {
-        var endereco = iFindByIdParentescoService.execute(id).orElseThrow(()->
-                new NotFoundException("Endereco nao localizado na base de dados. ID: " + id));
-        model.setId(endereco.getId());
-        return iUpdateParentescoService.execute(model);
+        if (id != null && model != null){
+            var endereco = iFindByIdParentescoService.execute(id).orElseThrow(()->
+                    new NotFoundException("Endereco nao localizado na base de dados. ID: " + id));
+            model.setId(endereco.getId());
+            return iUpdateParentescoService.execute(model);
+        }else {
+            throw new IllegalArgumentException("Parentesco ou id nao pode ser nulo.");
+        }
     }
 }

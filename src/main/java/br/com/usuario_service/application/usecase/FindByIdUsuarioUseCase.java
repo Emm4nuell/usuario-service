@@ -17,7 +17,11 @@ public class FindByIdUsuarioUseCase implements IFindByIdUsuarioUseCase {
 
     @Override
     public UsuarioModel execute(Long id) {
-        return iFindByIdUsuarioService.execute(id).orElseThrow(() ->
-                new NotFoundException("Endereco nao localizado na base de dados ID: " + id));
+        if (id != null){
+            return iFindByIdUsuarioService.execute(id).orElseThrow(() ->
+                    new NotFoundException("Endereco nao localizado na base de dados ID: " + id));
+        }else {
+            throw new IllegalArgumentException("Id Usuario nao pode ser nulo.");
+        }
     }
 }

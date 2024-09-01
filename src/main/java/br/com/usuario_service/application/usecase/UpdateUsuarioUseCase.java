@@ -17,11 +17,15 @@ public class UpdateUsuarioUseCase implements IUpdateUsuarioUseCase {
 
     @Override
     public UsuarioModel execute(Long id, UsuarioModel model) {
-        var domain = iFindByIdUsuarioService.execute(id).orElseThrow(()->
-                new NotFoundException("Usuario nao localizado na base de dados ID: " + id));
-        model.setId(domain.getId());
-        model.setData_created(domain.getData_created());
-        model.setStatus(domain.isStatus());
-        return iCreateUsuarioService.execute(model);
+        if (id != null && model != null){
+            var domain = iFindByIdUsuarioService.execute(id).orElseThrow(()->
+                    new NotFoundException("Usuario nao localizado na base de dados ID: " + id));
+            model.setId(domain.getId());
+            model.setData_created(domain.getData_created());
+            model.setStatus(domain.isStatus());
+            return iCreateUsuarioService.execute(model);
+        }else {
+            throw new IllegalArgumentException("Usuario ou id nao pode ser nulo.");
+        }
     }
 }

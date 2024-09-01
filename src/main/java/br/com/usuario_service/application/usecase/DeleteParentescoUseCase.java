@@ -16,10 +16,14 @@ public class DeleteParentescoUseCase implements IDeleteParentescoUseCase {
 
     @Override
     public void execute(Long id) {
-        if (iFindByIdParentescoService.execute(id).isPresent()){
-            iDeleteParentescoService.execute(id);
-        }else{
-            throw new NotFoundException("Endereco nao localizado na base de dados ID: " + id);
+        if (id != null){
+            if (iFindByIdParentescoService.execute(id).isPresent()){
+                iDeleteParentescoService.execute(id);
+            }else{
+                throw new NotFoundException("Endereco nao localizado na base de dados ID: " + id);
+            }
+        }else {
+            throw new IllegalArgumentException("Id Parentesco nao pode ser nulo.");
         }
     }
 }

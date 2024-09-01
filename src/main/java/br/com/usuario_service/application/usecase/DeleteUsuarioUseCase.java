@@ -16,10 +16,14 @@ public class DeleteUsuarioUseCase implements IDeleteUsuarioUseCase {
 
     @Override
     public void execute(Long id) {
-        if (iFindByIdUsuarioService.execute(id).isPresent()){
-            iDeleteUsuarioService.execute(id);
+        if (id != null) {
+            if (iFindByIdUsuarioService.execute(id).isPresent()){
+                iDeleteUsuarioService.execute(id);
+            }else {
+                throw new NotFoundException("Usuario nao localizado na base de dados. ID: " + id);
+            }
         }else {
-            throw new NotFoundException("Usuario nao localizado na base de dados. ID: " + id);
+            throw new IllegalArgumentException("Id Usuario nao pode ser nulo.");
         }
     }
 }
