@@ -6,9 +6,11 @@ import br.com.usuario_service.application.port.out.IDeleteUsuarioService;
 import br.com.usuario_service.application.port.out.IFindByIdUsuarioService;
 import br.com.usuario_service.infrastructure.config.UseCase;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 @UseCase
 @AllArgsConstructor
+@Slf4j
 public class DeleteUsuarioUseCase implements IDeleteUsuarioUseCase {
 
     private final IDeleteUsuarioService iDeleteUsuarioService;
@@ -20,9 +22,11 @@ public class DeleteUsuarioUseCase implements IDeleteUsuarioUseCase {
             if (iFindByIdUsuarioService.execute(id).isPresent()){
                 iDeleteUsuarioService.execute(id);
             }else {
+                log.error("Usuario nao localizado na base de dados. ID: {}", id);
                 throw new NotFoundException("Usuario nao localizado na base de dados. ID: " + id);
             }
         }else {
+            log.error("Id Usuario nao pode ser nulo.");
             throw new IllegalArgumentException("Id Usuario nao pode ser nulo.");
         }
     }
