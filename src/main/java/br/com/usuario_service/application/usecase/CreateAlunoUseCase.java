@@ -26,8 +26,8 @@ public class CreateAlunoUseCase implements ICreateAlunoUseCase {
     public AlunoModel execute(Long id, AlunoModel model) {
         if (model != null){
             var usuario = iFindByIdUsuarioService.execute(id).orElseThrow(() -> {
-                log.error("Usuario nao localizado na base de dados com ID: {}", id);
-                return new NotFoundException("Usuario nao localizado na base de dados com ID: " + id);
+                log.error("Usuario nao localizado na base de dados para cadastrar ALUNO com ID: {}", id);
+                return new NotFoundException("Usuario nao localizado na base de dados para cadastrar ALUNO com ID: " + id);
             });
             if (iFindByCpfAlunoService.execute(model.getCpf()).isEmpty()){
                 model.setUsuario(usuario);

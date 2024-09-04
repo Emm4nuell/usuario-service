@@ -1,0 +1,26 @@
+version: "2"
+
+services:
+  kafka:
+    container_name: kafka-9093
+    image: docker.io/bitnami/kafka:3.5
+    networks:
+      - network-kafka
+    ports:
+      - "9093:9093"
+    environment:
+      - KAFKA_BROKER_ID=1
+      # define os listners interno e externo
+      - KAFKA_CFG_LISTENERS=PLAINTEXT://:9093
+      # especificar o local que o produtor e consumidor deve se conectar interno e externo
+      - KAFKA_CFG_ADVERTISED_LISTENERS=PLAINTEXT://kafka:9093
+      # define os protocolos de segurança
+      - KAFKA_CFG_LISTENER_SECURITY_PROTOCOL_MAP=PLAINTEXT:PLAINTEXT
+      - KAFKA_CFG_INTER_BROKER_LISTENER_NAME=PLAINTEXT
+      - KAFKA_CFG_ZOOKEEPER_CONNECT=zookeeper:2181
+      # local de onde os produtores e consumidores externo deve se conectar
+      - ADVERTISED_HOST=localhost
+
+networks:
+  network-kafka:
+    driver: bridge
