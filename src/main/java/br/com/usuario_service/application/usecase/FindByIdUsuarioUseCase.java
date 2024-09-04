@@ -4,26 +4,26 @@ import br.com.usuario_service.application.domain.exception.NotFoundException;
 import br.com.usuario_service.application.domain.model.UsuarioModel;
 import br.com.usuario_service.application.port.in.IFindByIdUsuarioUseCase;
 import br.com.usuario_service.application.port.out.IFindByIdUsuarioService;
+import br.com.usuario_service.application.port.out.IKafkaLog;
 import br.com.usuario_service.infrastructure.config.UseCase;
 import lombok.AllArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 
 @UseCase
 @AllArgsConstructor
-@Slf4j
 public class FindByIdUsuarioUseCase implements IFindByIdUsuarioUseCase {
 
     private final IFindByIdUsuarioService iFindByIdUsuarioService;
+    private final IKafkaLog iKafkaLog;
 
     @Override
     public UsuarioModel execute(Long id) {
         if (id != null){
             return iFindByIdUsuarioService.execute(id).orElseThrow(() -> {
-                log.error("Endereco nao localizado na base de dados ID: {}", id);
+                iKafkaLog.execute("Endereco nao localizado na base de dados ID: " + id);
                 return new NotFoundException("Endereco nao localizado na base de dados ID: " + id);
             });
         }else {
-            log.error("Id Usuario nao pode ser nulo.");
+            iKafkaLog.execute("Id Usuario nao pode ser nulo.");
             throw new IllegalArgumentException("Id Usuario nao pode ser nulo.");
         }
     }

@@ -4,6 +4,7 @@ import br.com.usuario_service.application.domain.exception.NotFoundException;
 import br.com.usuario_service.application.port.in.IDeleteUsuarioUseCase;
 import br.com.usuario_service.application.port.out.IDeleteUsuarioService;
 import br.com.usuario_service.application.port.out.IFindByIdUsuarioService;
+import br.com.usuario_service.application.port.out.IKafkaLog;
 import br.com.usuario_service.infrastructure.config.UseCase;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -15,6 +16,7 @@ public class DeleteUsuarioUseCase implements IDeleteUsuarioUseCase {
 
     private final IDeleteUsuarioService iDeleteUsuarioService;
     private final IFindByIdUsuarioService iFindByIdUsuarioService;
+    private final IKafkaLog iKafkaLog;
 
     @Override
     public void execute(Long id) {
@@ -22,11 +24,11 @@ public class DeleteUsuarioUseCase implements IDeleteUsuarioUseCase {
             if (iFindByIdUsuarioService.execute(id).isPresent()){
                 iDeleteUsuarioService.execute(id);
             }else {
-                log.error("Usuario nao localizado na base de dados. ID: {}", id);
+                iKafkaLog.execute("Usuario nao localizado na base de dados. ID: " + id);
                 throw new NotFoundException("Usuario nao localizado na base de dados. ID: " + id);
             }
         }else {
-            log.error("Id Usuario nao pode ser nulo.");
+            iKafkaLog.execute("Id Usuario nao pode ser nulo.");
             throw new IllegalArgumentException("Id Usuario nao pode ser nulo.");
         }
     }

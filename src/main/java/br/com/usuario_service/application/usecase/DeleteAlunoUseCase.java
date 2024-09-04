@@ -4,6 +4,7 @@ import br.com.usuario_service.application.domain.exception.NotFoundException;
 import br.com.usuario_service.application.port.in.IDeleteAlunoUseCase;
 import br.com.usuario_service.application.port.out.IDeleteAlunoService;
 import br.com.usuario_service.application.port.out.IFindByIdAlunoService;
+import br.com.usuario_service.application.port.out.IKafkaLog;
 import br.com.usuario_service.infrastructure.config.UseCase;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -15,6 +16,7 @@ public class DeleteAlunoUseCase implements IDeleteAlunoUseCase {
 
     private final IDeleteAlunoService iDeleteAlunoService;
     private final IFindByIdAlunoService iFindByIdAlunoService;
+    private final IKafkaLog iKafkaLog;
 
     @Override
     public void execute(Long id) {
@@ -22,11 +24,11 @@ public class DeleteAlunoUseCase implements IDeleteAlunoUseCase {
             if (iFindByIdAlunoService.execute(id).isPresent()){
                 iDeleteAlunoService.execute(id);
             }else {
-                log.error("Aluno nao localizado na base de dados ID: {}", id);
+                iKafkaLog.execute("Aluno nao localizado na base de dados ID: " + id);
                 throw new NotFoundException("Aluno nao localizado na base de dados ID: " + id);
             }
         }else {
-            log.error("Aluno ou id nao pode ser nulo.");
+            iKafkaLog.execute("Aluno ou id nao pode ser nulo.");
             throw new IllegalArgumentException("Aluno ou id nao pode ser nulo.");
         }
     }
