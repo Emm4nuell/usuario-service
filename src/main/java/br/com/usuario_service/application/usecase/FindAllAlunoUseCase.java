@@ -24,7 +24,7 @@ public class FindAllAlunoUseCase implements IFindAllAlunoUseCase {
         if (model.isEmpty()){
             throw new LogAndThrow(
                     iKafkaLog,
-                    new ResourceNotFoundException("Ausencia de dados para mostrar.")
+                    new ResourceNotFoundException("Não é possível processar: a lista está vazia.")
             );
         }
             return model;

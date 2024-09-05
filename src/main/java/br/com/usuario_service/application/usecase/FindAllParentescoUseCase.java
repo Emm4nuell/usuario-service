@@ -24,7 +24,7 @@ public class FindAllParentescoUseCase implements IFindAllParentescoUseCase {
         if (endereco.isEmpty()){
             throw new LogAndThrow(
                     iKafkaLog,
-                    new ResourceNotFoundException("Ausencia de dados para mostrar.")
+                    new ResourceNotFoundException("Não é possível processar: a lista está vazia.")
             );
         }
         return endereco;
