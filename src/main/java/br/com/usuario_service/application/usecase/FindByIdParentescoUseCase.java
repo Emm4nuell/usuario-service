@@ -1,5 +1,6 @@
 package br.com.usuario_service.application.usecase;
 
+import br.com.usuario_service.application.domain.exception.LogAndThrow;
 import br.com.usuario_service.application.domain.exception.NotFoundException;
 import br.com.usuario_service.application.domain.model.ParentescoModel;
 import br.com.usuario_service.application.port.in.IFindByIdParentescoUseCase;
@@ -17,14 +18,17 @@ public class FindByIdParentescoUseCase implements IFindByIdParentescoUseCase {
 
     @Override
     public ParentescoModel execute(Long id) {
-        if (id != null){
-            return iFindByIdParentescoService.execute(id).orElseThrow(() -> {
-                iKafkaLog.execute("Usuario nao localizado na base de dados ID: " + id);
-                return new NotFoundException("Usuario nao localizado na base de dados ID: " + id);
-            });
-        }else {
-            iKafkaLog.execute("Id nao pode ser nulo.");
-            throw new IllegalArgumentException("Id nao pode ser nulo.");
+        if (id == null){
+            throw new LogAndThrow(
+                    iKafkaLog,
+                    new IllegalArgumentException("Id nao pode ser nulo.")
+            );
         }
+        return iFindByIdParentescoService.execute(id).orElseThrow(() ->
+                new LogAndThrow(
+                        iKafkaLog,
+                        new NotFoundException("Usuario nao localizado na base de dados ID: " + id)
+                )
+            );
     }
 }

@@ -1,5 +1,6 @@
 package br.com.usuario_service.application.usecase;
 
+import br.com.usuario_service.application.domain.exception.LogAndThrow;
 import br.com.usuario_service.application.domain.exception.NotFoundException;
 import br.com.usuario_service.application.domain.model.AlunoModel;
 import br.com.usuario_service.application.port.in.IFindByIdAlunoUseCase;
@@ -17,9 +18,10 @@ public class FindByIdAlunoUseCase implements IFindByIdAlunoUseCase {
 
     @Override
     public AlunoModel execute(Long id) {
-        return iFindByIdAlunoService.execute(id).orElseThrow(() -> {
-            iKafkaLog.execute("Aluno nao localizado na base de dados ID: " + id);
-            return new NotFoundException("Aluno nao localizado na base de dados ID: " + id);
-        });
+        return iFindByIdAlunoService.execute(id).orElseThrow(() ->
+                new LogAndThrow(
+                        iKafkaLog,
+                        new NotFoundException("Aluno nao localizado na base de dados ID: " + id)
+                ));
     }
 }

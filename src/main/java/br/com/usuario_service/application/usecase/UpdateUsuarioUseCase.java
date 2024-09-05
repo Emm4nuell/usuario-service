@@ -1,5 +1,6 @@
 package br.com.usuario_service.application.usecase;
 
+import br.com.usuario_service.application.domain.exception.LogAndThrow;
 import br.com.usuario_service.application.domain.exception.NotFoundException;
 import br.com.usuario_service.application.domain.model.UsuarioModel;
 import br.com.usuario_service.application.port.in.IUpdateUsuarioUseCase;
@@ -19,18 +20,22 @@ public class UpdateUsuarioUseCase implements IUpdateUsuarioUseCase {
 
     @Override
     public UsuarioModel execute(Long id, UsuarioModel model) {
-        if (id != null && model != null){
-            var domain = iFindByIdUsuarioService.execute(id).orElseThrow(()-> {
-                iKafkaLog.execute("Usuario nao localizado na base de dados ID: " + id);
-                return new NotFoundException("Usuario nao localizado na base de dados ID: " + id);
-            });
-            model.setId(domain.getId());
-            model.setData_created(domain.getData_created());
-            model.setStatus(domain.isStatus());
-            return iCreateUsuarioService.execute(model);
-        }else {
-            iKafkaLog.execute("Usuario ou id nao pode ser nulo.");
-            throw new IllegalArgumentException("Usuario ou id nao pode ser nulo.");
+        if (id == null || model == null){
+            throw new LogAndThrow(
+                    iKafkaLog,
+                    new IllegalArgumentException("Usuario ou id nao pode ser nulo.")
+            );
         }
+
+        var domain = iFindByIdUsuarioService.execute(id).orElseThrow(()->
+                new LogAndThrow(
+                        iKafkaLog,
+                        new NotFoundException("Usuario nao localizado na base de dados ID: " + id)
+                ));
+
+        model.setId(domain.getId());
+        model.setData_created(domain.getData_created());
+        model.setStatus(domain.isStatus());
+        return iCreateUsuarioService.execute(model);
     }
 }

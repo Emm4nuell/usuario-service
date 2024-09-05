@@ -1,5 +1,6 @@
 package br.com.usuario_service.application.usecase;
 
+import br.com.usuario_service.application.domain.exception.LogAndThrow;
 import br.com.usuario_service.application.domain.exception.ResourceNotFoundException;
 import br.com.usuario_service.application.domain.model.UsuarioModel;
 import br.com.usuario_service.application.port.in.IFindAllUsuariosUseCase;
@@ -21,8 +22,10 @@ public class FindAllUsuariosUseCase implements IFindAllUsuariosUseCase {
     public Page<UsuarioModel> execute(Pageable pageable) {
         var usuarios = iFindAllUsuariosService.execute(pageable);
         if (usuarios.isEmpty()){
-            iKafkaLog.execute("Ausencia de dados para mostrar.");
-            throw new ResourceNotFoundException("Ausencia de dados para mostrar.");
+            throw new LogAndThrow(
+                    iKafkaLog,
+                    new ResourceNotFoundException("Ausencia de dados para mostrar.")
+            );
         }
         return usuarios;
     }

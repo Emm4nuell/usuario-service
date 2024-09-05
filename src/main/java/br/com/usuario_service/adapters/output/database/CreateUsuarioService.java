@@ -15,7 +15,6 @@ public class CreateUsuarioService implements ICreateUsuarioService {
 
     private final IUsuarioRepository iUsuarioRepository;
     private final ObjectMapper mapper;
-    private final KafkaTemplate<String,String> kafkaTemplate;
 
     @Override
     public UsuarioModel execute(UsuarioModel model) {

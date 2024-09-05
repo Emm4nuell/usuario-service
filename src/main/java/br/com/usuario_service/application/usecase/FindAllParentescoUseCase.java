@@ -1,5 +1,6 @@
 package br.com.usuario_service.application.usecase;
 
+import br.com.usuario_service.application.domain.exception.LogAndThrow;
 import br.com.usuario_service.application.domain.exception.ResourceNotFoundException;
 import br.com.usuario_service.application.domain.model.ParentescoModel;
 import br.com.usuario_service.application.port.in.IFindAllParentescoUseCase;
@@ -21,8 +22,10 @@ public class FindAllParentescoUseCase implements IFindAllParentescoUseCase {
     public Page<ParentescoModel> execute(Pageable pageable) {
         var endereco = iFindAllParentescoService.execute(pageable);
         if (endereco.isEmpty()){
-            iKafkaLog.execute("Ausencia de dados para mostrar.");
-            throw new ResourceNotFoundException("Ausencia de dados para mostrar.");
+            throw new LogAndThrow(
+                    iKafkaLog,
+                    new ResourceNotFoundException("Ausencia de dados para mostrar.")
+            );
         }
         return endereco;
     }

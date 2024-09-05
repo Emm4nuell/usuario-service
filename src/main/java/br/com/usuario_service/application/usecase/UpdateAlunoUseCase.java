@@ -1,5 +1,6 @@
 package br.com.usuario_service.application.usecase;
 
+import br.com.usuario_service.application.domain.exception.LogAndThrow;
 import br.com.usuario_service.application.domain.exception.NotFoundException;
 import br.com.usuario_service.application.domain.model.AlunoModel;
 import br.com.usuario_service.application.port.in.IUpdateAlunoUseCase;
@@ -19,16 +20,20 @@ public class UpdateAlunoUseCase implements IUpdateAlunoUseCase {
 
     @Override
     public AlunoModel execute(Long id, AlunoModel model) {
-        if (id != null && model != null){
-            var aluno = iFindByIdAlunoService.execute(id).orElseThrow(() -> {
-                iKafkaLog.execute("Aluno nao localizado na base de dados. ID: " + id);
-                return new NotFoundException("Aluno nao localizado na base de dados. ID: " + id);
-            });
-            model.setId(aluno.getId());
-            return iUpdateAlunoService.execute(aluno);
-        }else{
-            iKafkaLog.execute("Aluno ou id nao pode ser nulo.");
-            throw new IllegalArgumentException("Aluno ou id nao pode ser nulo.");
+        if (id == null || model == null){
+            throw new LogAndThrow(
+                    iKafkaLog,
+                    new IllegalArgumentException("Aluno ou id nao pode ser nulo.")
+            );
         }
+
+        var aluno = iFindByIdAlunoService.execute(id).orElseThrow(() ->
+                new LogAndThrow(
+                        iKafkaLog,
+                        new NotFoundException("Aluno nao localizado na base de dados. ID: " + id)
+                ));
+
+        model.setId(aluno.getId());
+        return iUpdateAlunoService.execute(aluno);
     }
 }

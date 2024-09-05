@@ -1,5 +1,6 @@
 package br.com.usuario_service.application.usecase;
 
+import br.com.usuario_service.application.domain.exception.LogAndThrow;
 import br.com.usuario_service.application.domain.exception.NotFoundException;
 import br.com.usuario_service.application.domain.model.ParentescoModel;
 import br.com.usuario_service.application.port.in.IFindParentescoByUsuarioUseCase;
@@ -19,17 +20,19 @@ public class FindParentescoByUsuarioUseCase implements IFindParentescoByUsuarioU
 
     @Override
     public List<ParentescoModel> execute(Long id) {
-        if (id != null){
-            var endereco = iFindParentescoByUsuarioService.execute(id);
-            if (endereco.isEmpty()){
-                iKafkaLog.execute("Endereco nao localizado na base de dados ID: " + id);
-                throw new NotFoundException("Endereco nao localizado na base de dados ID: " + id);
-            }else {
-                return endereco;
-            }
-        }else {
-            iKafkaLog.execute("Id nao pode ser nulo.");
-            throw new IllegalArgumentException("Id nao pode ser nulo.");
+        if (id == null){
+            throw new LogAndThrow(
+                    iKafkaLog,
+                    new IllegalArgumentException("Id nao pode ser nulo.")
+            );
         }
+        var endereco = iFindParentescoByUsuarioService.execute(id);
+        if (endereco.isEmpty()) {
+            throw new LogAndThrow(
+                    iKafkaLog,
+                    new NotFoundException("Endereco nao localizado na base de dados ID: " + id)
+            );
+        }
+        return endereco;
     }
 }

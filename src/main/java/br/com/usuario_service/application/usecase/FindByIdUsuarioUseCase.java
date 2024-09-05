@@ -1,5 +1,6 @@
 package br.com.usuario_service.application.usecase;
 
+import br.com.usuario_service.application.domain.exception.LogAndThrow;
 import br.com.usuario_service.application.domain.exception.NotFoundException;
 import br.com.usuario_service.application.domain.model.UsuarioModel;
 import br.com.usuario_service.application.port.in.IFindByIdUsuarioUseCase;
@@ -17,14 +18,16 @@ public class FindByIdUsuarioUseCase implements IFindByIdUsuarioUseCase {
 
     @Override
     public UsuarioModel execute(Long id) {
-        if (id != null){
-            return iFindByIdUsuarioService.execute(id).orElseThrow(() -> {
-                iKafkaLog.execute("Endereco nao localizado na base de dados ID: " + id);
-                return new NotFoundException("Endereco nao localizado na base de dados ID: " + id);
-            });
-        }else {
-            iKafkaLog.execute("Id Usuario nao pode ser nulo.");
-            throw new IllegalArgumentException("Id Usuario nao pode ser nulo.");
+        if (id == null){
+            throw new LogAndThrow(
+                    iKafkaLog,
+                    new IllegalArgumentException("Id Usuario nao pode ser nulo.")
+            );
         }
+        return iFindByIdUsuarioService.execute(id).orElseThrow(() ->
+                new LogAndThrow(
+                        iKafkaLog,
+                        new NotFoundException("Endereco nao localizado na base de dados ID: " + id)
+                ));
     }
 }
