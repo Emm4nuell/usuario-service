@@ -2,6 +2,7 @@ package br.com.usuario_service.application.usecase;
 
 import br.com.usuario_service.application.domain.exception.CpfAlreadyExistsException;
 import br.com.usuario_service.application.domain.exception.LogAndThrow;
+import br.com.usuario_service.application.domain.model.KafkaLogModel;
 import br.com.usuario_service.application.domain.model.UsuarioModel;
 import br.com.usuario_service.application.port.in.ICreateUsuarioUseCase;
 import br.com.usuario_service.application.port.out.ICreateUsuarioService;
@@ -23,6 +24,7 @@ public class CreateUsuarioUseCase implements ICreateUsuarioUseCase {
     @Override
     public UsuarioModel execute(UsuarioModel model) {
         if (model == null){
+            new KafkaLogModel(iKafkaLog, new IllegalArgumentException("Os dados en"));
             throw new LogAndThrow(
                     iKafkaLog,
                     new IllegalArgumentException("Os dados do usuario nao pode ser nulo."));
